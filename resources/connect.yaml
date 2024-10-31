@@ -1,0 +1,27 @@
+input:
+  kafka:
+    addresses: ["xxx.any.us-east-1.mpx.prd.cloud.redpanda.com:9092"]
+    topics: ["player-moves"]
+    consumer_group: "player-move-consumer-group"
+    tls:
+      enabled: true
+      skip_cert_verify: true
+    sasl:
+      mechanism: SCRAM-SHA-512
+      user: "[YOUR_SASL_USERNAME]"
+      password: "[YOUR_SASL_PASSWORD]"
+
+output:
+  mongodb:
+    url: mongodb://mongodb:27017
+    database: "test"
+    collection: "playerMoves"
+    operation: insert-one
+    write_concern:
+      w: "majority"
+      j: false
+      w_timeout: ""
+    document_map: |-
+      root.player_id = this.player_id
+      root.move = this.move
+      root.timestamp = this.timestamp
